@@ -46,6 +46,7 @@ Plug 'kien/rainbow_parentheses.vim'
 "Plug 'benmills/vimux'
 Plug 'w0rp/ale'
 Plug 'tpope/vim-fugitive'
+Plug 'tomtom/tlib_vim'
 " -------------------------------------------------------- RUBY/RAILS
 Plug 'tpope/vim-rails' ", {'for': 'ruby'}
 Plug 'vim-ruby/vim-ruby' ", {'for': 'ruby'}
@@ -245,10 +246,13 @@ let g:syntastic_perl_checkers=['perl']
 let g:syntastic_php_checkers=['php']
 let g:syntastic_enable_perl_checker = 1
 let g:syntastic_javascript_checkers = ['eslint'] " https://jaxbot.me/articles/setting-up-vim-for-react-js-jsx-02-03-2015
+" ALE -- \d to "fix"
 let g:ale_fixers = { 'javascript': ['eslint'] }
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
 let g:ale_fix_on_save = 1
+nmap <leader>d <Plug>(ale_fix)
+
 " let g:syntastic_javascript_checkers = ['jshint']
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
