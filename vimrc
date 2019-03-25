@@ -28,6 +28,7 @@ Plug 'tpope/vim-sensible'
 Plug 'tmhedberg/matchit'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'kien/ctrlp.vim', {'on': 'CtrlP' }
+"Plug 'ctrlpvim/ctrlp.vim'
 Plug 'vim-syntastic/syntastic'
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdcommenter'
@@ -42,11 +43,15 @@ Plug 'bronson/vim-trailing-whitespace'
 "Plug '/Align'
 Plug 'itchyny/lightline.vim'
 Plug 'kien/rainbow_parentheses.vim'
-"Plug 'christoomey/vim-tmux-navigator'
-"Plug 'benmills/vimux'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'benmills/vimux'
 Plug 'w0rp/ale'
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'junegunn/gv.vim'
 Plug 'tomtom/tlib_vim'
+Plug 'junegunn/tabularize'
+Plug 'mileszs/ack.vim'
 " -------------------------------------------------------- RUBY/RAILS
 Plug 'tpope/vim-rails' ", {'for': 'ruby'}
 Plug 'vim-ruby/vim-ruby' ", {'for': 'ruby'}
@@ -68,8 +73,10 @@ Plug 'elzr/vim-json',   {'for': 'json'}
 " -------------------------------------------------------- HTML/MARKDOWN/TEMPLATE
 Plug 'othree/html5.vim', {'for': 'html'}
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
-" -------------------------------------------------------- PHP
-"Plug '/php'
+" -------------------------------------------------------- PERL/PHP
+Plug 'vim-perl/vim-perl', { 'for': 'perl', 'do': 'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
+Plug 'stanangeloff/php.vim'
+"Plug 'shawncplus/phpcomplete.vim' " too slow!
 " -------------------------------------------------------- GO/RUST/ELIXIR/NEW
 Plug 'rhysd/vim-crystal', {'for': 'crystal'}
 Plug 'fatih/vim-go', {'for': 'go'}
@@ -115,16 +122,39 @@ ab privl privlege_level
 ab yeild yield
 ab inless unless
 
-" Basics Keys: \m mouseOff, \M mouseOn, \N tabnew, \p paste, \w wrap, \W killTrailingSpace, jk ESC, \p reflow-para
+" Modes  \m mouseOff, \M mouseOn, \N tabnew, \p paste, \w wrap, \W killTrailingSpace, jk ESC, \p reflow-para
 noremap <Leader>m :set mouse=<CR>
 noremap <Leader>M :set mouse=a<CR>
-noremap <Leader>W :%s/\s\+$//<CR>
-noremap <Leader>w :set invwrap<CR>
-noremap <Leader>N :tabnew
 noremap <Leader>p :set invpaste<CR>
-noremap <Leader>G :GitGutterToggle<CR>
 inoremap jk <Esc>
-inoremap <Leader>p gqap
+
+" Block \b_ --------------------------------------------------------------------
+" Block fold >> << Tab
+noremap <Leader>bf vi}zf
+noremap <Leader>b> vi}>
+noremap <Leader>b< vi}<
+vnoremap < <gv
+vnoremap > >gv
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <LT>gv
+" Duplicate: line/vblock
+vnoremap <Leader>" yPgv
+noremap "" Yp
+vnoremap "" yPgv
+vnoremap <Leader>= :Tabularize /=<CR>
+noremap <Leader>= :Tabularize /=<CR>
+" Move visual block
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+
+" Edits : \e_ ------------------------------------------------------------------
+"   \es - Substitute cursor word with new value, you do: "newword/g"
+nnoremap <Leader>es :%s/\<<C-r>=expand('<cword>')<CR>\>/
+noremap <Leader>eW :%s/\s\+$//<CR>
+noremap <Leader>ew :set invwrap<CR>
+" reflow para
+inoremap <Leader>ep gqap
 inoremap {<CR> {}<Left><CR><CR><Up><Tab>
 noremap <Leader>\ :wincmd w<CR>
 noremap c_ ct_
@@ -136,21 +166,10 @@ nnoremap <leader># 80i#<Esc>
 nnoremap <leader>V :source ~/.vimrc<CR>
 nnoremap <silent> <leader>gw :vimgrep /<C-r><C-w>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
 nmap <silent> <leader>cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
-nnoremap <leader>a *<C-O>:AckFromSearch!<CR>
-" Duplicate: line/vblock
-noremap <Leader>" Yp
-vnoremap <Leader>" yPgv
-noremap "" Yp
-vnoremap "" yPgv
-vnoremap <Leader>= :Tabularize /=<CR>
-noremap <Leader>= :Tabularize /=<CR>
 " surrounds current word with quotes
 map <Leader>' ysiw'
 map <Leader>" ysiw"
 
-" Reselect visual block after shift, Duplicate Line/Block
-vnoremap < <gv
-vnoremap > >gv
 
 " Saving: \s Save, \S SaveAll, Q Quit,
 nnoremap Q :q<CR>
@@ -235,23 +254,39 @@ set directory^=~/.vim/_temp//      " where to put swap files.
 ""  " From https://medium.com/@crashybang/supercharge-vim-with-fzf-and-ripgrep-d4661fc853d2
 ""  " command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 ""
-""
-""  " fugitive
-""  " nerdtree
+
+" fugitive / GitGutter
+"   gr (resets buffer to original)
+command -nargs=+ Ggrepcw execute 'silent Ggrep!' <q-args> | cw | redraw!
+noremap <Leader>gA :Gcommit --amend -a<CR>
+noremap <Leader>gc :Gcommit -a<CR>
+noremap <Leader>gb :Gblame<CR>
+noremap <Leader>ge :Gedit<CR>
+noremap <Leader>gd :Gvdiff<CR>
+noremap <Leader>gg :Ggrepcw <cword><CR>
+noremap <Leader>gl :0Glog<CR>
+noremap <Leader>gG :GitGutterToggle<CR>
+noremap <Leader>gR :Gread<CR>
+noremap <Leader>gs :Gstatus<CR>
+set statusline+=%{FugativeStatusline()}
+
+" nerdtree
 noremap <Leader>f :NERDTreeToggle<CR>
 noremap <Leader>F :NERDTreeFind<CR>
+
 " syntastic
 noremap <Leader>x <Esc>:SyntasticToggleMode<CR>
 let g:syntastic_perl_checkers=['perl']
 let g:syntastic_php_checkers=['php']
 let g:syntastic_enable_perl_checker = 1
 let g:syntastic_javascript_checkers = ['eslint'] " https://jaxbot.me/articles/setting-up-vim-for-react-js-jsx-02-03-2015
-" ALE -- \d to "fix"
+
+" ALE -- \ef to "fix" Edit feature namespace \e_
 let g:ale_fixers = { 'javascript': ['eslint'] }
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
 let g:ale_fix_on_save = 1
-nmap <leader>d <Plug>(ale_fix)
+nmap <leader>ef <Plug>(ale_fix)
 
 " let g:syntastic_javascript_checkers = ['jshint']
 set statusline+=%#warningmsg#
@@ -261,12 +296,17 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
 " ctrlp
 noremap <Leader>o :CtrlP<CR>
-noremap <Leader>r :tabnew<CR>:CtrlP<CR>
 noremap <Leader>i :split<CR><C-w>j:CtrlP<CR>
 noremap <Leader>v :vsplit<CR><C-w>l:CtrlP<CR>
 noremap <Leader>t <Esc>:tabnew<CR>:CtrlP<CR>
+
+noremap <Leader>oo :CtrlP<CR>
+noremap <Leader>oi :split<CR><C-w>j:CtrlP<CR>
+noremap <Leader>ov :vsplit<CR><C-w>l:CtrlP<CR>
+noremap <Leader>ot <Esc>:tabnew<CR>:CtrlP<CR>
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 ""
@@ -289,12 +329,23 @@ autocmd FileType ruby noremap <Leader>rc :Rcontroller<CR>
 autocmd FileType ruby noremap <Leader>rv :Rview<CR>
 autocmd FileType ruby noremap <Leader>rr :R<CR>
 autocmd FileType ruby noremap <Leader>ra :A<CR>
-""  " vim-rspec
+
+" vim-rspec
 let g:rspec_runner = "os_x_iterm2"
 let g:rspec_command = "!bin/rspec {spec}"
-noremap <Leader>s :call RunCurrentSpecFile()<CR>
+map <Leader>sf :call RunCurrentSpecFile()<CR>
+map <Leader>ss :call RunNearestSpec()<CR>
+map <Leader>sl :call RunLastSpec()<CR>
+map <Leader>sa :call RunAllSpecs()<CR>
+
 " vim-markdown
 let g:vim_markdown_folding_disabled = 1
+
+" Ack
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+nnoremap <leader>A *<C-O>:AckFromSearch!<CR>
 
 "===============================================================================
 " My Functions
