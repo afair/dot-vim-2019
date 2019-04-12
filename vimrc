@@ -78,11 +78,11 @@ Plug 'vim-perl/vim-perl', { 'for': 'perl', 'do': 'make clean carp dancer highlig
 Plug 'stanangeloff/php.vim'
 "Plug 'shawncplus/phpcomplete.vim' " too slow!
 " -------------------------------------------------------- GO/RUST/ELIXIR/NEW
-Plug 'rhysd/vim-crystal', {'for': 'crystal'}
-Plug 'fatih/vim-go', {'for': 'go'}
-Plug 'elixir-lang/vim-elixir', {'for': 'elixir'}
-Plug 'rust-lang/rust.vim', {'for': 'rust'}
-Plug 'vim-scripts/c.vim', {'for': 'c'}
+"Plug 'rhysd/vim-crystal', {'for': 'crystal'}
+"Plug 'fatih/vim-go', {'for': 'go'}
+"Plug 'elixir-lang/vim-elixir', {'for': 'elixir'}
+"Plug 'rust-lang/rust.vim', {'for': 'rust'}
+"Plug 'vim-scripts/c.vim', {'for': 'c'}
 call plug#end()
 "===============================================================================
 
