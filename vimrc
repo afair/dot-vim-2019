@@ -126,7 +126,9 @@ ab inless unless
 noremap <Leader>m :set mouse=<CR>
 noremap <Leader>M :set mouse=a<CR>
 noremap <Leader>p :set invpaste<CR>
+noremap <Leader>w :set invwrap<CR>
 inoremap jk <Esc>
+noremap <Leader>W :%s/\s\+$//<CR>
 
 " Block \b_ --------------------------------------------------------------------
 " Block fold >> << Tab
