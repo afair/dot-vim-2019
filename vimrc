@@ -19,6 +19,7 @@ call plug#begin('~/.vim/plugged')
 " -------------------------------------------------------- Colorschemes
 "Plug 'flazz/vim-colorschemes'
 Plug 'vim-scripts/vibrantink' ", { 'as': 'vibrantink' }
+Plug 'afair/vibrantink2' ", { 'as': 'vibrantink' }
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'romainl/Apprentice'
 "Plug 'dracula/vim', { 'as': 'dracula' }
@@ -52,6 +53,12 @@ Plug 'junegunn/gv.vim'
 Plug 'tomtom/tlib_vim'
 Plug 'junegunn/tabularize'
 Plug 'mileszs/ack.vim'
+Plug 'mileszs/ack.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'kana/vim-textobj-user'
+"Plug 'kana/vim-textobj-function'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" :cocInstall coc-solargraph
 " -------------------------------------------------------- RUBY/RAILS
 Plug 'tpope/vim-rails' ", {'for': 'ruby'}
 Plug 'vim-ruby/vim-ruby' ", {'for': 'ruby'}
@@ -70,6 +77,7 @@ Plug 'moll/vim-node', {'for': 'javascript'}
 Plug 'elmcast/elm-vim', {'for': 'elm'}
 Plug 'leafgarland/typescript-vim', {'for': 'typescript'}
 Plug 'elzr/vim-json',   {'for': 'json'}
+Plug 'posva/vim-vue'
 " -------------------------------------------------------- HTML/MARKDOWN/TEMPLATE
 Plug 'othree/html5.vim', {'for': 'html'}
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
@@ -89,7 +97,7 @@ call plug#end()
 set nocompatible
 syntax on
 filetype plugin indent on
-colorscheme vibrantink
+colorscheme vibrantink2
 "colorscheme dracula
 "colorscheme apprentice
 set number
@@ -128,6 +136,7 @@ noremap <Leader>M :set mouse=a<CR>
 noremap <Leader>p :set invpaste<CR>
 noremap <Leader>w :set invwrap<CR>
 inoremap jk <Esc>
+inoremap `` <Esc>
 noremap <Leader>W :%s/\s\+$//<CR>
 
 " Block \b_ --------------------------------------------------------------------
@@ -143,11 +152,13 @@ vnoremap <S-Tab> <LT>gv
 vnoremap <Leader>" yPgv
 noremap "" Yp
 vnoremap "" yPgv
-vnoremap <Leader>= :Tabularize /=<CR>
-noremap <Leader>= :Tabularize /=<CR>
+"vnoremap <Leader>= :Tabularize /=<CR>
+"noremap <Leader>= :Tabularize /=<CR>
 " Move visual block
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+noremap <Leader>= =i{
+"noremap == =i{
 
 
 " Edits : \e_ ------------------------------------------------------------------
@@ -256,6 +267,13 @@ set directory^=~/.vim/_temp//      " where to put swap files.
 ""  " From https://medium.com/@crashybang/supercharge-vim-with-fzf-and-ripgrep-d4661fc853d2
 ""  " command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 ""
+" vim-easy-align: Visual: vipga=   Normal: gaip=
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+noremap <Leader>= gaip=
+"vnoremap <Leader>= ga=
 
 " fugitive / GitGutter
 "   gr (resets buffer to original)
@@ -274,7 +292,8 @@ set statusline+=%{FugativeStatusline()}
 
 " nerdtree
 noremap <Leader>f :NERDTreeToggle<CR>
-noremap <Leader>F :NERDTreeFind<CR>
+"noremap <Leader>F :NERDTreeFind<CR>
+noremap <Leader>F :NERDTreeToggle %<CR>
 
 " syntastic
 noremap <Leader>x <Esc>:SyntasticToggleMode<CR>
@@ -287,6 +306,8 @@ let g:syntastic_javascript_checkers = ['eslint'] " https://jaxbot.me/articles/se
 let g:ale_fixers = { 'javascript': ['eslint'] }
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
+let g:ale_sign_error = 'X'
+let g:ale_sign_warning = '!'
 let g:ale_fix_on_save = 1
 nmap <leader>ef <Plug>(ale_fix)
 
@@ -393,10 +414,10 @@ noremap <Leader>n :call RotateNumber()<CR>
 "===============================================================================
 
 " This function hack runs AFTER load, so we can correct mappings by plugins, etc.
-autocmd VimEnter * call RunAfterLoad()
-function RunAfterLoad()
-  inoremap <Leader>t <Esc>:tabnew<CR>:CtrlP<CR>
-endfunction
+"autocmd VimEnter * call RunAfterLoad()
+"function RunAfterLoad()
+"  inoremap <Leader>t <Esc>:tabnew<CR>:CtrlP<CR>
+"endfunction
 
 if filereadable(expand("~/.vimrc.local"))
 	source ~/.vimrc.local
