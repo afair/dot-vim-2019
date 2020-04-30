@@ -81,6 +81,8 @@ Plug 'posva/vim-vue'
 " -------------------------------------------------------- HTML/MARKDOWN/TEMPLATE
 Plug 'othree/html5.vim', {'for': 'html'}
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
+" Needs node, yarn, vim 8.1, neovim
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 " -------------------------------------------------------- PERL/PHP
 Plug 'vim-perl/vim-perl', { 'for': 'perl', 'do': 'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
 Plug 'stanangeloff/php.vim'
@@ -138,6 +140,7 @@ noremap <Leader>w :set invwrap<CR>
 inoremap jk <Esc>
 inoremap `` <Esc>
 noremap <Leader>W :%s/\s\+$//<CR>
+inoremap <Leader>( (function(e){});<Esc>hhi<Enter><Enter><Up><Space><Space>
 
 " Block \b_ --------------------------------------------------------------------
 " Block fold >> << Tab
@@ -309,6 +312,11 @@ let g:ale_sign_warning = '⚠️'
 let g:ale_sign_error = 'X'
 let g:ale_sign_warning = '!'
 let g:ale_fix_on_save = 1
+let g:ale_linters = {'ruby': ['standardrb']}
+" Standardrb: https://github.com/testdouble/standard/wiki/IDE:-vim
+let g:ale_fixers = {'ruby': ['standardrb']}
+let g:ruby_indent_assignment_style = 'variable'
+
 nmap <leader>ef <Plug>(ale_fix)
 
 " let g:syntastic_javascript_checkers = ['jshint']
@@ -369,6 +377,23 @@ if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
 nnoremap <leader>A *<C-O>:AckFromSearch!<CR>
+
+" lightline
+function! CocCurrentFunction()
+    return get(b:, 'coc_current_function', '')
+endfunction
+
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status',
+      \   'currentfunction': 'CocCurrentFunction'
+      \ },
+      \ }
 
 "===============================================================================
 " My Functions
