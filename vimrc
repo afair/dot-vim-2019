@@ -7,6 +7,8 @@
 "-------------------------------------------------------------------------------
 " Use the following line only when using an alternate repo!
 "let &rtp = substitute(&rtp, '\.vim\>', '.vim2', 'g')
+" python2 -m ensurepip --default-pip
+" python2 -m pip install --user --upgrade pynvim
 "-------------------------------------------------------------------------------
 " 🌺 junegunn/vim-plug Plugin Manager
 " :PlugInstall [name...]
@@ -20,6 +22,8 @@ call plug#begin('~/.vim/plugged')
 "Plug 'flazz/vim-colorschemes'
 Plug 'vim-scripts/vibrantink' ", { 'as': 'vibrantink' }
 Plug 'afair/vibrantink2' ", { 'as': 'vibrantink' }
+"Plug 'letorbi/vim-colors-modern-borland'
+"Plug 'caglartoklu/borlandp.vim'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'romainl/Apprentice'
 "Plug 'dracula/vim', { 'as': 'dracula' }
@@ -34,10 +38,7 @@ Plug 'vim-syntastic/syntastic'
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdcommenter'
 Plug 'easymotion/vim-easymotion'
-Plug 'ervandew/supertab'
 Plug 'tpope/vim-repeat'
-Plug 'honza/vim-snippets'
-Plug 'garbas/vim-snipmate'
 Plug 'bronson/vim-trailing-whitespace'
 "Plug 'jeetsukumaran/vim-buffergator'
 "Plug 'godlygeek/tabular'
@@ -59,6 +60,17 @@ Plug 'kana/vim-textobj-user'
 "Plug 'kana/vim-textobj-function'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " :cocInstall coc-solargraph
+" -------------------------------------------------------- Snippets / Completion
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'garbas/vim-snipmate'
+Plug 'honza/vim-snippets'
+"Plug 'SirVer/ultisnips'
+"Plug 'ervandew/supertab'
+"Plug 'ycm-core/YouCompleteMe'
+" brew install cmake python mono go nodejs
+" cd ~/.vim/bundle/YouCompleteMe
+" python3 install.py --all
 " -------------------------------------------------------- RUBY/RAILS
 Plug 'tpope/vim-rails' ", {'for': 'ruby'}
 Plug 'vim-ruby/vim-ruby' ", {'for': 'ruby'}
@@ -114,6 +126,9 @@ set complete-=i                 " Without included files
 setglobal complete-=i           " Without included files
 set autoindent                  " Auto: autoindent, noautoindent
 set smartindent                 " For C-style languages: nosmartindent
+hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+nnoremap <Leader>l :set cursorline!<CR>
+" nnoremap <Leader>l :set cursorline! cursorcolumn!<CR>
 
 " Search Controls
 set hlsearch                    " Highlights search terms: hls, nohls
@@ -141,6 +156,8 @@ inoremap jk <Esc>
 inoremap `` <Esc>
 noremap <Leader>W :%s/\s\+$//<CR>
 inoremap <Leader>( (function(e){});<Esc>hhi<Enter><Enter><Up><Space><Space>
+" Folding
+noremap <Leader>I :set foldmethod=indent<CR>
 
 " Block \b_ --------------------------------------------------------------------
 " Block fold >> << Tab
@@ -176,6 +193,8 @@ noremap <Leader>\ :wincmd w<CR>
 noremap c_ ct_
 noremap _ f_<Right>
 nnoremap <leader># 80i#<Esc>
+" Jump to col 80
+nnoremap <leader>8 080l
 
 " More: \V reloadVimrc, \gw grepWord, \cf nextConflict, \a AckWord, \" Dup
 "nnoremap <leader>sv :source ~/.vimrc<CR>
@@ -185,7 +204,6 @@ nmap <silent> <leader>cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 " surrounds current word with quotes
 map <Leader>' ysiw'
 map <Leader>" ysiw"
-
 
 " Saving: \s Save, \S SaveAll, Q Quit,
 nnoremap Q :q<CR>
@@ -233,6 +251,7 @@ augroup myfiletypes
   " Clear old autocmds in group
   autocmd!
   autocmd BufNewFile,BufRead *.html,*.tpl setf html
+  " autocmd BufNewFile,BufRead *.php setf php " php.html.javascript
   " autoindent with two spaces, always expand tabs
   autocmd FileType ruby,eruby,yaml,rhtml,erb,haml set ai sw=2 sts=2 et
   autocmd FileType php,tpl,html set tabstop=2
@@ -394,6 +413,11 @@ let g:lightline = {
       \   'currentfunction': 'CocCurrentFunction'
       \ },
       \ }
+
+" snippets / completion
+:imap <Tab> <Plug>snipMateNextOrTrigger
+:smap <Tab> <Plug>snipMateNextOrTrigger
+let g:snipMate = { 'snippet_version' : 1 }
 
 "===============================================================================
 " My Functions
