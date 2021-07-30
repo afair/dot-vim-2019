@@ -47,19 +47,23 @@ Plug 'itchyny/lightline.vim'
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'benmills/vimux'
-Plug 'w0rp/ale'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/gv.vim'
 Plug 'tomtom/tlib_vim'
 Plug 'junegunn/tabularize'
-Plug 'mileszs/ack.vim'
-Plug 'mileszs/ack.vim'
+Plug 'jremmen/vim-ripgrep'
 Plug 'junegunn/vim-easy-align'
 Plug 'kana/vim-textobj-user'
+Plug 'craigemery/vim-autotag'
+" Plug 'jiangmiao/auto-pairs'
+" -------------------------------------------------------- Language Servers
 "Plug 'kana/vim-textobj-function'
+Plug 'w0rp/ale' " Language Server
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" :cocInstall coc-solargraph
+" ^ gem install solargraph; vim :CocInstall coc-solargraph
+" Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
+" PERL: cpan install Perl::LanguageServer; vim :CocInstall coc-perl
 " -------------------------------------------------------- Snippets / Completion
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
@@ -204,6 +208,7 @@ nmap <silent> <leader>cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 " surrounds current word with quotes
 map <Leader>' ysiw'
 map <Leader>" ysiw"
+map <Leader>{ ysiw{
 
 " Saving: \s Save, \S SaveAll, Q Quit,
 nnoremap Q :q<CR>
@@ -296,13 +301,18 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 noremap <Leader>= gaip=
 "vnoremap <Leader>= ga=
+"let g:AutoPairShortcutToggle = '<C-Q>'
+
+" vim-ripgrep
+noremap <Leader>N :cnext<CR>
+noremap <Leader>P :cprev<CR>
 
 " fugitive / GitGutter
 "   gr (resets buffer to original)
 command -nargs=+ Ggrepcw execute 'silent Ggrep!' <q-args> | cw | redraw!
 noremap <Leader>gA :Gcommit --amend -a<CR>
 noremap <Leader>gc :Gcommit -a<CR>
-noremap <Leader>gb :Gblame<CR>
+noremap <Leader>gb :Git blame<CR>
 noremap <Leader>ge :Gedit<CR>
 noremap <Leader>gd :Gvdiff<CR>
 noremap <Leader>gg :Ggrepcw <cword><CR>
@@ -325,13 +335,35 @@ let g:syntastic_enable_perl_checker = 1
 let g:syntastic_javascript_checkers = ['eslint'] " https://jaxbot.me/articles/setting-up-vim-for-react-js-jsx-02-03-2015
 
 " ALE -- \ef to "fix" Edit feature namespace \e_
-let g:ale_fixers = { 'javascript': ['eslint'] }
+"let g:ale_fixers = { 'javascript': ['eslint'] }
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
 let g:ale_sign_error = 'X'
 let g:ale_sign_warning = '!'
 let g:ale_fix_on_save = 1
 let g:ale_linters = {'ruby': ['standardrb']}
+let g:ale_fixers = {'ruby': ['standardrb'],  'javascript': ['eslint']}
+"let g:ale_fix_on_save = 0
+"nnoremap <Leader>X let g:ale_fix_on_save = 1<CR>
+let g:coc_global_extensions = [
+      \ 'coc-perl',
+\ ]
+
+" LanguageClient-neovim
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
+    \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
+    \ 'python': ['/usr/local/bin/pyls'],
+    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
+    \ }
+" note that if you are using Plug mapping you should not use `noremap` mappings.
+nmap <F5> <Plug>(lcn-menu)
+" Or map each action separately
+nmap <silent>K <Plug>(lcn-hover)
+nmap <silent> gd <Plug>(lcn-definition)
+nmap <silent> <F2> <Plug>(lcn-rename)
+
 " Standardrb: https://github.com/testdouble/standard/wiki/IDE:-vim
 let g:ale_fixers = {'ruby': ['standardrb']}
 let g:ruby_indent_assignment_style = 'variable'
@@ -382,7 +414,7 @@ autocmd FileType ruby noremap <Leader>ra :A<CR>
 
 " vim-rspec
 let g:rspec_runner = "os_x_iterm2"
-let g:rspec_command = "!bin/rspec {spec}"
+let g:rspec_command = "!rspec {spec}"
 map <Leader>sf :call RunCurrentSpecFile()<CR>
 map <Leader>ss :call RunNearestSpec()<CR>
 map <Leader>sl :call RunLastSpec()<CR>
