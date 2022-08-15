@@ -1,0 +1,204 @@
+"===============================================================================
+" VIM Configuration v3 - .vimrc basic file
+" See https://gist.github.com/afair/8df4ddd5645fd4adc536fb3947561a15
+"===============================================================================
+
+set nocompatible
+syntax on
+filetype plugin indent on
+colorscheme slate
+set number
+set textwidth=0
+set formatoptions-=t            " Turn off auto-wrap text
+set nolist                      " Turn off trailing whitespace indicators
+set noerrorbells                " no beep
+set mouse=a                     " Mouse: n=normal v=visuali=insert c=cmdline a=all
+set nowrap
+set hlsearch
+set complete-=i                 " Without included files
+setglobal complete-=i           " Without included files
+set autoindent                  " Auto: autoindent, noautoindent
+set smartindent                 " For C-style languages: nosmartindent
+hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+nnoremap <Leader>l :set cursorline!<CR>
+" nnoremap <Leader>l :set cursorline! cursorcolumn!<CR>
+
+" Search Controls
+set hlsearch                    " Highlights search terms: hls, nohls
+set ignorecase                  " Ignore Case on search: ignorecase, noignorecase
+set smartcase                   " When searching with uppercase, turns off ignorecase
+set incsearch                   " Incremental search while you are typing
+noremap <CR> :nohlsearch<CR>j^
+
+" Abbreviations: common typing error corrections
+ab teh the
+ab cofirm confirm
+ab subscibe subscribe
+ab subsciber subscriber
+ab subsc subscriber
+ab privl privlege_level
+ab yeild yield
+ab inless unless
+
+" Modes  \m mouseOff, \M mouseOn, \N tabnew, \p paste, \w wrap, \W killTrailingSpace, jk ESC, \p reflow-para
+noremap <Leader>m :set mouse=<CR>
+noremap <Leader>M :set mouse=a<CR>
+noremap <Leader>p :set invpaste<CR>
+noremap <Leader>w :set invwrap<CR>
+inoremap jk <Esc>
+inoremap `` <Esc>
+noremap <Leader>W :%s/\s\+$//<CR>
+inoremap <Leader>( (function(e){});<Esc>hhi<Enter><Enter><Up><Space><Space>
+" Folding
+noremap <Leader>I :set foldmethod=indent<CR>
+
+" Block \b_ --------------------------------------------------------------------
+" Block fold >> << Tab
+noremap <Leader>bf vi}zf
+noremap <Leader>b> vi}>
+noremap <Leader>b< vi}<
+vnoremap < <gv
+vnoremap > >gv
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <LT>gv
+" Duplicate: line/vblock
+vnoremap <Leader>" yPgv
+noremap "" Yp
+vnoremap "" yPgv
+"vnoremap <Leader>= :Tabularize /=<CR>
+"noremap <Leader>= :Tabularize /=<CR>
+" Move visual block
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+noremap <Leader>= =i{
+"noremap == =i{
+
+
+" Edits : \e_ ------------------------------------------------------------------
+"   \es - Substitute cursor word with new value, you do: "newword/g"
+nnoremap <Leader>es :%s/\<<C-r>=expand('<cword>')<CR>\>/
+noremap <Leader>eW :%s/\s\+$//<CR>
+noremap <Leader>ew :set invwrap<CR>
+" reflow para
+inoremap <Leader>ep gqap
+inoremap {<CR> {}<Left><CR><CR><Up><Tab>
+noremap <Leader>\ :wincmd w<CR>
+noremap c_ ct_
+noremap _ f_<Right>
+nnoremap <leader># 80i#<Esc>
+" Jump to col 80
+nnoremap <leader>8 080l
+
+" More: \V reloadVimrc, \gw grepWord, \cf nextConflict, \a AckWord, \" Dup
+"nnoremap <leader>sv :source ~/.vimrc<CR>
+nnoremap <leader>V :source ~/.vimrc<CR>
+nnoremap <silent> <leader>gw :vimgrep /<C-r><C-w>/ %<CR>:ccl<CR>:cwin<CR><C-W>J:nohls<CR>
+nmap <silent> <leader>cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
+" surrounds current word with quotes
+map <Leader>' ysiw'
+map <Leader>" ysiw"
+map <Leader>{ ysiw{
+
+" Saving: \s Save, \S SaveAll, Q Quit,
+nnoremap Q :q<CR>
+nnoremap W :w<CR>
+nnoremap <leader>s :w<CR>
+"inoremap <leader>s <Esc>:w<CR>
+nnoremap <leader>S :wall<CR>
+nnoremap <silent> <C-S> :if expand("%") == ""<CR>browse confirm w<CR>else<CR>confirm w<CR>endif<CR>
+inoremap <silent> <C-S> <Esc>:if expand("%") == ""<CR>browse confirm w<CR>else<CR>confirm w<CR>endif<CR>
+
+" Window/Tab Navigation: Ctrl-<hjkl>, \' NextWindow, \[ PrevTab, \] NextTab,
+noremap <Leader>[ :tabprev<CR>
+noremap <Leader>] :tabnext<CR>
+
+" Command line editing
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+
+" Tabstops
+au BufRead,BufNewFile *.tpl set filetype=html
+au BufNewFile,BufRead .*.muttrc set filetype=muttrc
+set tabstop=2
+set ai sw=2 sts=2 et smartindent
+augroup myfiletypes
+  " Clear old autocmds in group
+  autocmd!
+  autocmd BufNewFile,BufRead *.html,*.tpl setf html
+  " autocmd BufNewFile,BufRead *.php setf php " php.html.javascript
+  " autoindent with two spaces, always expand tabs
+  autocmd FileType ruby,eruby,yaml,rhtml,erb,haml set ai sw=2 sts=2 et
+  autocmd FileType php,tpl,html set tabstop=2
+  autocmd FileType perl,php set ai sw=2 sts=2 et smartindent
+  autocmd FileType ruby,eruby,yaml,erb,rhtml set tabstop=2 smartindent
+  autocmd FileType tpl,html set ai sw=2 sts=2 et smartindent tabstop=2
+  autocmd FileType css set smartindent tabstop=2
+  autocmd FileType c,h set smartindent tabstop=8
+  " Tabs only
+  autocmd FileType conf set noet ci pi sts=0 sw=8 ts=8
+  " Poor Man's Macros: def<cr> expands to full Ruby method definition
+  " "autocmd FileType ruby iab def def<cr>end<esc>-A
+augroup END
+
+set backupdir^=~/.vim/_backup//    " where to put backup files.
+set directory^=~/.vim/_temp//      " where to put swap files.
+
+" Rails: \rm Model, \rc Controller, \rv View, \rr Related, \ra Alternative
+autocmd FileType ruby noremap <Leader>rm :Rmodel<CR>
+autocmd FileType ruby noremap <Leader>rc :Rcontroller<CR>
+autocmd FileType ruby noremap <Leader>rv :Rview<CR>
+autocmd FileType ruby noremap <Leader>rr :R<CR>
+autocmd FileType ruby noremap <Leader>ra :A<CR>
+
+"===============================================================================
+" My Functions
+"===============================================================================
+
+" Disable/Enable the Arrow Keys...
+noremap <Leader><Right> :call DisableArrows()<CR>
+function EnableArrows()
+	noremap <Up> <Up>
+	noremap <Down> <Down>
+	noremap <Left> <Left>
+	noremap <Right> <Right>
+	noremap <Leader><Right> :call DisableArrows()<CR>
+endfunction
+function DisableArrows()
+	noremap <Up> <NOP>
+	noremap <Down> <NOP>
+	noremap <Left> <NOP>
+	noremap <Right> <NOP>
+	noremap <Leader><Right> :call EnableArrows()<CR>
+endfunction
+
+" RotateNumber: \n LineNumber-RelativeNumber-Off
+function RotateNumber()
+	if &l:relativenumber
+		let &l:number=0
+		let &l:relativenumber=0
+		echom "No Line Numbers"
+	elseif &l:number
+		let &l:number=1
+		let &l:relativenumber=1
+		echom "Relative Line Numbers"
+	else
+		let &l:relativenumber=0
+		let &l:number=1
+		echom "Line Numbers"
+	endif
+endfunction
+noremap <Leader>n :call RotateNumber()<CR>
+
+"===============================================================================
+" Epilogue: Source .vimrc.local if exists
+"===============================================================================
+
+" This function hack runs AFTER load, so we can correct mappings by plugins, etc.
+"autocmd VimEnter * call RunAfterLoad()
+"function RunAfterLoad()
+"  inoremap <Leader>t <Esc>:tabnew<CR>:CtrlP<CR>
+"endfunction
+
+if filereadable(expand("~/.vimrc.local"))
+	source ~/.vimrc.local
+endif

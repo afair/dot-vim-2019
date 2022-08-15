@@ -52,7 +52,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/gv.vim'
 Plug 'tomtom/tlib_vim'
 Plug 'junegunn/tabularize'
-Plug 'jremmen/vim-ripgrep'
+"Plug 'jremmen/vim-ripgrep' Removed temporarily for neovim --HEAD error
 Plug 'junegunn/vim-easy-align'
 Plug 'kana/vim-textobj-user'
 Plug 'craigemery/vim-autotag'
@@ -61,9 +61,10 @@ Plug 'craigemery/vim-autotag'
 "Plug 'kana/vim-textobj-function'
 Plug 'w0rp/ale' " Language Server
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" ^ gem install solargraph; vim :CocInstall coc-solargraph
+" RUBY: gem install solargraph; vim :CocInstall coc-solargraph
 " Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 " PERL: cpan install Perl::LanguageServer; vim :CocInstall coc-perl
+Plug 'github/copilot.vim'
 " -------------------------------------------------------- Snippets / Completion
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
@@ -104,9 +105,10 @@ Plug 'vim-perl/vim-perl', { 'for': 'perl', 'do': 'make clean carp dancer highlig
 Plug 'stanangeloff/php.vim'
 "Plug 'shawncplus/phpcomplete.vim' " too slow!
 " -------------------------------------------------------- GO/RUST/ELIXIR/NEW
-"Plug 'rhysd/vim-crystal', {'for': 'crystal'}
+Plug 'vim-crystal/vim-crystal', {'for': 'crystal'}
 "Plug 'fatih/vim-go', {'for': 'go'}
 "Plug 'elixir-lang/vim-elixir', {'for': 'elixir'}
+"Plug 'elixir-editors/vim-elixir' ", {'for': 'elixir'}
 "Plug 'rust-lang/rust.vim', {'for': 'rust'}
 "Plug 'vim-scripts/c.vim', {'for': 'c'}
 call plug#end()
@@ -423,9 +425,12 @@ map <Leader>sa :call RunAllSpecs()<CR>
 " vim-markdown
 let g:vim_markdown_folding_disabled = 1
 
+" Elixir
+autocmd FileType eex,heex set ai sw=2 sts=2 et smartindent tabstop=2 filetype=html
+
 " Ack
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
+if executable('rg')
+  let g:ackprg = 'rg --vimgrep'
 endif
 nnoremap <leader>A *<C-O>:AckFromSearch!<CR>
 
