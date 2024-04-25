@@ -6,7 +6,8 @@
 set nocompatible
 syntax on
 filetype plugin indent on
-colorscheme slate
+colorscheme torte
+highlight LineNr ctermfg=grey
 set number
 set textwidth=0
 set formatoptions-=t            " Turn off auto-wrap text
@@ -45,11 +46,15 @@ noremap <Leader>m :set mouse=<CR>
 noremap <Leader>M :set mouse=a<CR>
 noremap <Leader>p :set invpaste<CR>
 noremap <Leader>w :set invwrap<CR>
+noremap <Leader>t :tabnew<CR>:Explore<CR>
+noremap <Leader>s :Hexplore<CR>
+noremap <Leader>v :Vexplore<CR>
+noremap <Leader>- :split<CR>
+"noremap <Leader>| :vsplit<CR>
 inoremap jk <Esc>
 inoremap `` <Esc>
 noremap <Leader>W :%s/\s\+$//<CR>
 inoremap <Leader>( (function(e){});<Esc>hhi<Enter><Enter><Up><Space><Space>
-" Folding
 noremap <Leader>I :set foldmethod=indent<CR>
 
 " Block \b_ --------------------------------------------------------------------

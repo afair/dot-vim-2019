@@ -56,7 +56,7 @@ Plug 'junegunn/tabularize'
 Plug 'junegunn/vim-easy-align'
 Plug 'kana/vim-textobj-user'
 Plug 'craigemery/vim-autotag'
-" Plug 'jiangmiao/auto-pairs'
+"Plug 'jiangmiao/auto-pairs'
 " -------------------------------------------------------- Language Servers
 "Plug 'kana/vim-textobj-function'
 Plug 'w0rp/ale' " Language Server
@@ -80,7 +80,7 @@ Plug 'honza/vim-snippets'
 Plug 'tpope/vim-rails' ", {'for': 'ruby'}
 Plug 'vim-ruby/vim-ruby' ", {'for': 'ruby'}
 Plug 'thoughtbot/vim-rspec' ", {'for': 'ruby'}
-Plug 'tpope/vim-haml', {'for':'haml'}
+"Plug 'tpope/vim-haml', {'for':'haml'}
 "Plug '/bundler.vim', {'for': 'ruby'}
 Plug 'tpope/vim-endwise', {'for': 'ruby'}
 Plug 'seattlerb/minitest', {'for': 'ruby'}
@@ -107,7 +107,7 @@ Plug 'stanangeloff/php.vim'
 " -------------------------------------------------------- GO/RUST/ELIXIR/NEW
 Plug 'vim-crystal/vim-crystal', {'for': 'crystal'}
 "Plug 'fatih/vim-go', {'for': 'go'}
-"Plug 'elixir-lang/vim-elixir', {'for': 'elixir'}
+Plug 'elixir-lang/vim-elixir', {'for': 'elixir'}
 "Plug 'elixir-editors/vim-elixir' ", {'for': 'elixir'}
 "Plug 'rust-lang/rust.vim', {'for': 'rust'}
 "Plug 'vim-scripts/c.vim', {'for': 'c'}
@@ -152,6 +152,7 @@ ab subsc subscriber
 ab privl privlege_level
 ab yeild yield
 ab inless unless
+ab hacket hachet
 
 " Modes  \m mouseOff, \M mouseOn, \N tabnew, \p paste, \w wrap, \W killTrailingSpace, jk ESC, \p reflow-para
 noremap <Leader>m :set mouse=<CR>
@@ -224,6 +225,19 @@ inoremap <silent> <C-S> <Esc>:if expand("%") == ""<CR>browse confirm w<CR>else<C
 " Window/Tab Navigation: Ctrl-<hjkl>, \' NextWindow, \[ PrevTab, \] NextTab,
 noremap <Leader>[ :tabprev<CR>
 noremap <Leader>] :tabnext<CR>
+
+" Experiment: Insert closing pairs of () [] {} '' ""
+" https://stackoverflow.com/questions/8958357/vim-plugin-for-auto-closed-parenthesis
+""inoremap ( ()<Left>
+""inoremap [ []<Left>
+""inoremap { {}<Left>
+""inoremap ' ''<Left>
+""inoremap " ""<Left>
+""inoremap < <><Left>
+""inoremap {<CR> {<CR>}<Esc>O
+" inoremap {;<CR> {<CR>};<Esc>O
+" inoremap {<Space> {<Space>}<Left>
+
 
 " https://gist.github.com/afair/bb9d76aeb15b0524075a373ca37c5994
 " vimdiff: ]c => NextDiff, [c =>PrevDiff, do => DiffObtain, dp => DiffPut
